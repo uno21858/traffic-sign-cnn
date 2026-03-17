@@ -1,0 +1,6 @@
+data/
+models/
+__pycache__/
+*.pth
+.ipynb_checkpoints/.idea/
+.DS_Store
