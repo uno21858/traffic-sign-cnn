@@ -58,3 +58,39 @@ Se aceptó como punto de partida para el baseline. Esta arquitectura se comparar
 La arquitectura propuesta es estándar y conservadora, lo cual es correcto para un baseline: no tiene sentido sobrecomplicar el punto de partida. Sin embargo, no se validó experimentalmente aún. La arquitectura podría necesitar ajustes dependiendo del tamaño de entrada de las imágenes del GTSRB (que varía entre 15x15 y 250x250 píxeles). Pendiente definir el tamaño de resize estándar antes de implementar (probablemente 32x32 o 64x64).
 
 ---
+
+## Entrada 4 — Wrapper de PyTorch para dataset de Hugging Face
+**Fecha:** 16 de marzo, 2026  
+**Herramienta:** Claude (Anthropic)
+
+**Prompt utilizado:**
+> "¿Cómo cargo el dataset de Hugging Face como tensor de PyTorch? ¿No puedo simplemente usar ToTensor directo?"
+
+**Respuesta resumida:**  
+Claude explicó que Hugging Face y PyTorch son librerías distintas con estructuras de datos incompatibles. Para usar el dataset con DataLoader se necesita un wrapper que herede de `torch.utils.data.Dataset` e implemente `__len__` y `__getitem__`. Esto actúa como puente entre ambas librerías.
+
+**Decisión tomada:**  
+Se implementó la clase `GTSRBDataset` como wrapper. El transform se aplica dentro del `__getitem__` convirtiendo cada imagen PIL a tensor normalizado en el momento de acceso.
+
+**Reflexión crítica:**  
+El wrapper es básicamente un traductor entre dos ecosistemas. No es algo específico del GTSRB, es el patrón estándar de PyTorch para cualquier dataset externo. Una vez entendido el por qué, tiene sentido. La referencia en la documentación oficial es `torch.utils.data.Dataset`: https://pytorch.org/docs/stable/data.html
+
+---
+
+## Entrada 5 — Normalización: qué es y de dónde vienen los valores
+**Fecha:** 16 de marzo, 2026  
+**Herramienta:** Claude (Anthropic)
+
+**Prompt utilizado:**
+> "¿Para qué sirve el Normalize en los transforms? ¿De dónde salen esos valores de mean y std?"
+
+**Respuesta resumida:**  
+Claude explicó que Normalize centra los valores de los píxeles cerca de 0 después del ToTensor (que los lleva al rango [0,1]). Esto hace que el entrenamiento converja más rápido y sea más estable. Los valores de mean y std usados (`[0.3337, 0.3064, 0.3171]` y `[0.2672, 0.2564, 0.2629]`) fueron precalculados sobre el dataset GTSRB original por la comunidad.
+
+**Decisión tomada:**  
+Se usaron los valores precalculados como punto de partida por ser los estándar del dataset. Se aplicó solo a val y test con `transform`, y al train con `transform_train` que incluye augmentation adicional.
+
+**Reflexión crítica:**  
+Queda la duda de si usar valores estáticos calculados sobre otro subset es lo correcto. En producción, lo ideal sería calcular mean y std sobre el propio dataset de entrenamiento, ya que en un entorno real las condiciones de las imágenes siempre cambian. Para este proyecto los valores precalculados son aceptables, pero es una limitación a documentar en el análisis final.
+
+---
