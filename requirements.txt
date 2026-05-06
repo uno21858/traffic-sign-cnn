@@ -9,3 +9,6 @@ datasets
 Pillow
 seaborn
 triton
+fastapi
+uvicorn
+python-multipart
