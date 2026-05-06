@@ -3,5 +3,5 @@
   <component name="Black">
     <option name="sdkName" value="Remote 3.12 (sftp://uno21@192.168.1.66:22/home/uno21/.virtualenvs/traffic-sign-cnn/bin/python)" />
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="Remote 3.12 (sftp://uno21@192.168.1.66:22/home/uno21/.virtualenvs/traffic-sign-cnn/bin/python)" project-jdk-type="Python SDK" />
+  <component name="ProjectRootManager" version="2" project-jdk-name="uv SSH (sftp://uno21@192.168.1.66:22/home/uno21/.virtualenvs/traffic-sign-cnn/bin/python)" project-jdk-type="Python SDK" />
 </project>
