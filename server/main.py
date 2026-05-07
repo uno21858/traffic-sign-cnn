@@ -6,6 +6,10 @@ from PIL import Image
 from torch import nn
 import io
 
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+
+
 app = FastAPI(title="Traffic Sign Classifier API")
 
 app.add_middleware(
@@ -14,6 +18,13 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.mount("/ui", StaticFiles(directory="ui"), name="ui")
+
+@app.get("/")
+def root():
+    return FileResponse("ui/index.html")
+
 
 CLASS_NAMES = {
     0: "Speed limit 20km/h", 1: "Speed limit 30km/h", 2: "Speed limit 50km/h",
