@@ -21,6 +21,7 @@ app.add_middleware(
 
 app.mount("/ui", StaticFiles(directory="ui"), name="ui")
 
+
 @app.get("/")
 def root():
     return FileResponse("ui/index.html")
