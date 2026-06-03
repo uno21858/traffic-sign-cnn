@@ -4,6 +4,10 @@ Sistema de clasificación de señales de tráfico usando Redes Neuronales Convol
 
 **Demo en vivo:** https://cnn.uno21things.dev
 
+## Video Demo
+
+[![Demo](https://img.youtube.com/vi/D6qYXlD6pt4/0.jpg)](https://youtu.be/D6qYXlD6pt4)
+
 ---
 
 ## Descripción
